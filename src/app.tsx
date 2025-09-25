@@ -19,11 +19,10 @@ export const App = function () {
     const [error, setError] = React.useState<string | null>(null);
 
     const spent = INITIAL_BUDGET.sub(remaining);
-    const remainingAccent = remaining.equals(0)
-        ? 'text-danger'
-        : remaining.lessThan(INITIAL_BUDGET.mul(0.25))
-        ? 'text-warning'
-        : 'text-success';
+
+    let remainingAccent = 'text-success';
+    if (remaining.lessThan(INITIAL_BUDGET.mul(0.25))) remainingAccent = 'text-warning';
+    if (remaining.lessThanOrEqualTo(0)) remainingAccent = 'text-danger';
 
     const handleSubmit = function (e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
