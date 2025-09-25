@@ -1,6 +1,7 @@
+import {Decimal} from 'decimal.js';
 import React from 'react';
 
-const INITIAL_BUDGET = 210;
+const INITIAL_BUDGET = new Decimal(210);
 
 const CURRENCY_FORMATTER = new Intl.NumberFormat(undefined, {
     currency: 'EUR',
@@ -8,26 +9,34 @@ const CURRENCY_FORMATTER = new Intl.NumberFormat(undefined, {
     style: 'currency',
 });
 
+const formatCurrency = function (value: Decimal) {
+    return CURRENCY_FORMATTER.format(value.toNumber());
+};
+
 export const App = function () {
     const [remaining, setRemaining] = React.useState(INITIAL_BUDGET);
     const [amount, setAmount] = React.useState('');
     const [error, setError] = React.useState<string | null>(null);
 
-    const spent = INITIAL_BUDGET - remaining;
-    const remainingAccent =
-        remaining === 0 ? 'text-danger' : remaining < INITIAL_BUDGET * 0.25 ? 'text-warning' : 'text-success';
+    const spent = INITIAL_BUDGET.sub(remaining);
+    const remainingAccent = remaining.equals(0)
+        ? 'text-danger'
+        : remaining.lessThan(INITIAL_BUDGET.mul(0.25))
+        ? 'text-warning'
+        : 'text-success';
 
     const handleSubmit = function (e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        const parsedValue = Number.parseFloat(amount);
-        if (!Number.isFinite(parsedValue)) {
+        try {
+            const parsedValue = new Decimal(amount);
+            setRemaining(remaining.sub(parsedValue));
+            setAmount('');
+            setError(null);
+        } catch {
             setError('Enter a positive amount to register.');
             return;
         }
-        setRemaining(remaining - parsedValue);
-        setAmount('');
-        setError(null);
     };
 
     const handleAmountChange = function (e: React.ChangeEvent<HTMLInputElement>) {
@@ -49,7 +58,7 @@ export const App = function () {
                             <div className="d-flex justify-content-between align-items-center">
                                 <span className="text-uppercase small text-muted">Total budget</span>
                                 <span className="fs-4 fw-semibold balance-accent">
-                                    {CURRENCY_FORMATTER.format(INITIAL_BUDGET)}
+                                    {formatCurrency(INITIAL_BUDGET)}
                                 </span>
                             </div>
                             <div className="d-flex justify-content-between align-items-center mt-3">
@@ -58,13 +67,13 @@ export const App = function () {
                                     className={`fs-4 fw-semibold balance-accent ${remainingAccent}`}
                                     data-testid="remaining-balance"
                                 >
-                                    {CURRENCY_FORMATTER.format(remaining)}
+                                    {formatCurrency(remaining)}
                                 </span>
                             </div>
                             <div className="d-flex justify-content-between align-items-center mt-3">
                                 <span className="text-uppercase small text-muted">Costs registered</span>
                                 <span className="fs-5 fw-medium text-secondary balance-accent">
-                                    {CURRENCY_FORMATTER.format(spent)}
+                                    {formatCurrency(spent)}
                                 </span>
                             </div>
                         </div>
