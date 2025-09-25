@@ -46,7 +46,7 @@ export const App = function () {
 
     return (
         <div className="container py-5">
-            <div className="budget-panel mx-auto">
+            <div className="mx-auto">
                 <div className="text-center mb-4">
                     <h1 className="display-6 fw-semibold mb-2">Budget tracker</h1>
                     <p className="text-muted mb-0">Register costs against your fixed budget.</p>
@@ -87,11 +87,11 @@ export const App = function () {
                                     €
                                 </span>
                                 <input
+                                    autoFocus
                                     aria-describedby="cost-addon cost-help"
                                     className={`form-control${error ? ' is-invalid' : ''}`}
                                     id="cost-amount"
                                     inputMode="decimal"
-                                    min="0"
                                     name="amount"
                                     onChange={handleAmountChange}
                                     placeholder="0.00"

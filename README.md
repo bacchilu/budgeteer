@@ -1,73 +1,58 @@
-# React + TypeScript + Vite
+# Budgeteer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Budgeteer is a lightweight budgeting playground built with React, TypeScript, and Vite. It showcases a simple way to track a fixed budget, register costs, and display remaining funds using Bootstrap for styling and `decimal.js` for precise money math.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✅ Fixed starting budget with real-time remaining/spent totals
+- ✅ Cost entry form with basic validation and helpful messaging
+- ✅ Bootstrap-based layout for responsive cards and forms
+- ✅ Currency formatting via the browser's locale-aware `Intl.NumberFormat`
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vite.dev/) for fast dev server and builds
+- [Bootstrap 5](https://getbootstrap.com/) for UI components and utility classes
+- [decimal.js](https://mikemcl.github.io/decimal.js/) for precise arithmetic
+- [ESLint](https://eslint.org/) for linting
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
+2. **Start the dev server**
+   ```bash
+   npm run dev
+   ```
+   Vite will print a local URL (default `http://localhost:5173`).
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Useful Scripts
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- `npm run dev` – start the Vite dev server
+- `npm run build` – type-check and build the production bundle
+- `npm run preview` – preview the production build locally
+- `npm run lint` – run ESLint over the project
+- `npm run update` – check and update dependencies with `npm-check-updates`
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+
+```
+src/
+  app.tsx       # Bootstrap-based budgeting panel
+  app.css       # Component-specific styles
+  main.tsx      # React entry point
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Roadmap Ideas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Persist budgets and transactions
+- Add categories and history views
+- Surface charts and insights
+- Integrate authentication for multi-user budgets
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## License
+
+This project is provided as-is without a specific license. Adapt it freely for your own budgeting experiments.
