@@ -11,6 +11,8 @@
 
 ## Refactoring xx
 
+-   I don't like the way the modal is implemented
+
 ## Devop
 
 -   Remove the TODO from git?
