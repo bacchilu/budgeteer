@@ -1,0 +1,12 @@
+:root {
+    --hn-background: #f6f6ef;
+    --hn-primary: #ff6600;
+    --hn-text: #000;
+    --hn-muted: #828282;
+}
+
+body {
+    background-color: var(--hn-background);
+    color: var(--hn-text);
+    font-family: 'Verdana', 'Geneva', sans-serif;
+}
