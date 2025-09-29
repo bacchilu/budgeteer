@@ -11,10 +11,6 @@
 
 ## Refactoring xx
 
--   Break `App` react component into smaller presentation and container pieces
--   Consider a Design Language Architecture. Try to be Bootstrap indipendent.
--   Extract currency formatting into a dedicated utility module
-
 ## Devop
 
 -   Remove the TODO from git?
