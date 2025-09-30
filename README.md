@@ -52,7 +52,6 @@ src/
 - Add categories and history views
 - Surface charts and insights
 - Integrate authentication for multi-user budgets
-- Track upcoming work in [TODO.md](./TODO.md)
 
 ## License
 
