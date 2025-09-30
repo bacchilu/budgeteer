@@ -1,6 +1,6 @@
 # Budgeteer
 
-Budgeteer is a lightweight budgeting playground built with React, TypeScript, and Vite. It showcases a simple way to track a fixed budget, register costs, and display remaining funds using Bootstrap for styling and `decimal.js` for precise money math.
+Budgeteer is an evolving sandbox for testing personal budgeting strategies. The app is built with React, TypeScript, and Vite, pairing hands-on UI experiments with in-progress ideas around tracking budgets, logging expenses, and visualizing what's left. Bootstrap handles layout polish while `decimal.js` keeps the math reliable.
 
 ## Features
 
