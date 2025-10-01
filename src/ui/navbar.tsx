@@ -4,7 +4,14 @@ import {formatCurrency} from '../lib/format-currency';
 import {INITIAL_BUDGET} from '../lib/total-budget';
 
 export const Navbar: React.FC<{title: string}> = function ({title}) {
+    const [draftBudget, setDraftBudget] = React.useState(INITIAL_BUDGET.toString());
     const formattedBudget = formatCurrency(INITIAL_BUDGET);
+
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = function (e) {
+        e.preventDefault();
+
+        console.log(draftBudget);
+    };
 
     return (
         <>
@@ -40,9 +47,39 @@ export const Navbar: React.FC<{title: string}> = function ({title}) {
                             </h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                         </div>
-                        <div className="modal-body">
-                            <p className="mb-0 fs-4 fw-semibold">{formattedBudget}</p>
-                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div className="modal-body">
+                                <div className="mb-3">
+                                    <label className="form-label" htmlFor="total-budget-input">
+                                        Total budget
+                                    </label>
+                                    <div className="input-group">
+                                        <span className="input-group-text" aria-hidden="true">
+                                            $
+                                        </span>
+                                        <input
+                                            id="total-budget-input"
+                                            type="number"
+                                            className="form-control"
+                                            min="0"
+                                            step="0.01"
+                                            value={draftBudget}
+                                            onChange={(e) => setDraftBudget(e.target.value)}
+                                            aria-describedby="total-budget-help"
+                                            inputMode="decimal"
+                                        />
+                                    </div>
+                                    <div id="total-budget-help" className="form-text">
+                                        Current total: {formattedBudget}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="submit" className="btn btn-primary">
+                                    Save
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
