@@ -1,11 +1,11 @@
 import React from 'react';
 
-import {useInitialBudget} from '../hooks/total';
+import {useInitialBudget} from '../hooks/data';
 import {formatCurrency} from '../lib/format-currency';
 
 const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTargetId}) {
-    const initialBudget = useInitialBudget();
-    const [draftBudget, setDraftBudget] = React.useState(initialBudget.toString());
+    const {initial_budget} = useInitialBudget();
+    const [draftBudget, setDraftBudget] = React.useState(initial_budget.toString());
 
     const handleDraftBudgetChange = (nextValue: string) => {
         setDraftBudget(nextValue);
@@ -56,7 +56,7 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
                                     />
                                 </div>
                                 <div id="total-budget-help" className="form-text">
-                                    Current value: {formatCurrency(initialBudget)}
+                                    Current value: {formatCurrency(initial_budget)}
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
 };
 
 export const Navbar: React.FC<{title: string}> = function ({title}) {
-    const initialBudget = useInitialBudget();
+    const {initial_budget} = useInitialBudget();
 
     const modalTargetId = 'total-budget-modal';
     return (
@@ -91,7 +91,7 @@ export const Navbar: React.FC<{title: string}> = function ({title}) {
                         aria-expanded="false"
                     >
                         <span className="d-block text-uppercase small text-white-50">Initial budget</span>
-                        <span className="fw-semibold text-white">{formatCurrency(initialBudget)}</span>
+                        <span className="fw-semibold text-white">{formatCurrency(initial_budget)}</span>
                     </a>
                 </div>
             </nav>

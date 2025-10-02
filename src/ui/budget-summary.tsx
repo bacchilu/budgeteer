@@ -1,16 +1,16 @@
 import {Decimal} from 'decimal.js';
 import React from 'react';
 
-import {useInitialBudget} from '../hooks/total';
+import {useInitialBudget} from '../hooks/data';
 import {formatCurrency} from '../lib/format-currency';
 
 export const BudgetSummary: React.FC<{remaining: Decimal}> = function ({remaining}) {
-    const initialBudget = useInitialBudget();
+    const {initial_budget} = useInitialBudget();
 
-    const spent = initialBudget.sub(remaining);
+    const spent = initial_budget.sub(remaining);
 
     let remainingAccent = 'text-success';
-    if (remaining.lessThan(initialBudget.mul(0.25))) remainingAccent = 'text-warning';
+    if (remaining.lessThan(initial_budget.mul(0.25))) remainingAccent = 'text-warning';
     if (remaining.lessThanOrEqualTo(0)) remainingAccent = 'text-danger';
 
     return (
