@@ -1,12 +1,12 @@
 import {Decimal} from 'decimal.js';
 import React from 'react';
 
+import {useInitialBudget} from '../hooks/total';
 import {formatCurrency} from '../lib/format-currency';
 
-export const BudgetSummary: React.FC<{initialBudget: Decimal; remaining: Decimal}> = function ({
-    initialBudget,
-    remaining,
-}) {
+export const BudgetSummary: React.FC<{remaining: Decimal}> = function ({remaining}) {
+    const initialBudget = useInitialBudget();
+
     const spent = initialBudget.sub(remaining);
 
     let remainingAccent = 'text-success';

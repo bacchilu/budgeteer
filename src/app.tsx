@@ -1,11 +1,12 @@
 import {Decimal} from 'decimal.js';
 import React from 'react';
 
-import {INITIAL_BUDGET} from './lib/total-budget';
+import {useInitialBudget} from './hooks/total';
 import {BudgetSummary, Card, Form, Header, Navbar, Page} from './ui';
 
 export const App = function () {
-    const [remaining, setRemaining] = React.useState<Decimal>(INITIAL_BUDGET);
+    const initialBudget = useInitialBudget();
+    const [remaining, setRemaining] = React.useState<Decimal>(initialBudget);
 
     const handleSubmit = function (amount: Decimal) {
         setRemaining(remaining.sub(amount));
@@ -17,7 +18,7 @@ export const App = function () {
             <Page>
                 <Header description="Register costs against your fixed budget." />
                 <Card>
-                    <BudgetSummary initialBudget={INITIAL_BUDGET} remaining={remaining} />
+                    <BudgetSummary remaining={remaining} />
                     <Form onSubmit={handleSubmit} />
                 </Card>
             </Page>

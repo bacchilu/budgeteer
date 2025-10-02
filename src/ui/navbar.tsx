@@ -1,10 +1,11 @@
 import React from 'react';
 
+import {useInitialBudget} from '../hooks/total';
 import {formatCurrency} from '../lib/format-currency';
-import {INITIAL_BUDGET} from '../lib/total-budget';
 
 const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTargetId}) {
-    const [draftBudget, setDraftBudget] = React.useState(INITIAL_BUDGET.toString());
+    const initialBudget = useInitialBudget();
+    const [draftBudget, setDraftBudget] = React.useState(initialBudget.toString());
 
     const handleDraftBudgetChange = (nextValue: string) => {
         setDraftBudget(nextValue);
@@ -28,7 +29,7 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title" id="total-budget-modal-title">
-                            Total budget
+                            Initial budget
                         </h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                     </div>
@@ -55,7 +56,7 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
                                     />
                                 </div>
                                 <div id="total-budget-help" className="form-text">
-                                    Current total: {formatCurrency(INITIAL_BUDGET)}
+                                    Current value: {formatCurrency(initialBudget)}
                                 </div>
                             </div>
                         </div>
@@ -72,6 +73,8 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
 };
 
 export const Navbar: React.FC<{title: string}> = function ({title}) {
+    const initialBudget = useInitialBudget();
+
     const modalTargetId = 'total-budget-modal';
     return (
         <>
@@ -87,8 +90,8 @@ export const Navbar: React.FC<{title: string}> = function ({title}) {
                         aria-controls={modalTargetId}
                         aria-expanded="false"
                     >
-                        <span className="d-block text-uppercase small text-white-50">Total budget</span>
-                        <span className="fw-semibold text-white">{formatCurrency(INITIAL_BUDGET)}</span>
+                        <span className="d-block text-uppercase small text-white-50">Initial budget</span>
+                        <span className="fw-semibold text-white">{formatCurrency(initialBudget)}</span>
                     </a>
                 </div>
             </nav>
