@@ -1,11 +1,12 @@
 import React from 'react';
 
-import {useInitialBudget} from '../hooks/data';
+import {type BudgetData} from '../hooks/data';
+import {useBudgetDataContext} from '../hooks/data-context';
 import {formatCurrency} from '../lib/format-currency';
 
 const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTargetId}) {
-    const {initial_budget} = useInitialBudget();
-    const [draftBudget, setDraftBudget] = React.useState(initial_budget.toString());
+    const budgetData: BudgetData = useBudgetDataContext();
+    const [draftBudget, setDraftBudget] = React.useState(budgetData.initial_budget.toString());
 
     const handleDraftBudgetChange = (nextValue: string) => {
         setDraftBudget(nextValue);
@@ -56,7 +57,7 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
                                     />
                                 </div>
                                 <div id="total-budget-help" className="form-text">
-                                    Current value: {formatCurrency(initial_budget)}
+                                    Current value: {formatCurrency(budgetData.initial_budget)}
                                 </div>
                             </div>
                         </div>
@@ -73,7 +74,7 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
 };
 
 export const Navbar: React.FC<{title: string}> = function ({title}) {
-    const {initial_budget} = useInitialBudget();
+    const budgetData: BudgetData = useBudgetDataContext();
 
     const modalTargetId = 'total-budget-modal';
     return (
@@ -91,7 +92,7 @@ export const Navbar: React.FC<{title: string}> = function ({title}) {
                         aria-expanded="false"
                     >
                         <span className="d-block text-uppercase small text-white-50">Initial budget</span>
-                        <span className="fw-semibold text-white">{formatCurrency(initial_budget)}</span>
+                        <span className="fw-semibold text-white">{formatCurrency(budgetData.initial_budget)}</span>
                     </a>
                 </div>
             </nav>
