@@ -2,16 +2,15 @@ import {Decimal} from 'decimal.js';
 import React from 'react';
 
 import {useBudgetData, type BudgetData} from './hooks/data';
-import {BudgetDataProvider, useBudgetDataContext} from './hooks/data-context';
+import {BudgetDataProvider} from './hooks/data-context';
 import {BudgetSummary, Card, Form, Header, Navbar, Page} from './ui';
 import {LoadingPage} from './ui/loading-page';
 
 const Main: React.FC = function () {
-    const budgetData: BudgetData = useBudgetDataContext();
-    const [remaining, setRemaining] = React.useState<Decimal>(budgetData.initial_budget);
+    const [spentAmount, setSpentAmount] = React.useState<Decimal>(new Decimal('0'));
 
     const handleSubmit = function (amount: Decimal) {
-        setRemaining(remaining.sub(amount));
+        setSpentAmount(spentAmount.add(amount));
     };
 
     return (
@@ -20,7 +19,7 @@ const Main: React.FC = function () {
             <Page>
                 <Header description="Register costs against your fixed budget." />
                 <Card>
-                    <BudgetSummary remaining={remaining} />
+                    <BudgetSummary spentAmount={spentAmount} />
                     <Form onSubmit={handleSubmit} />
                 </Card>
             </Page>
