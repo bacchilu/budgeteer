@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js';
 import React from 'react';
 
 import {type BudgetData} from '../hooks/data';
@@ -15,7 +16,10 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = function (e) {
         e.preventDefault();
 
-        console.log(draftBudget);
+        try {
+            const v = new Decimal(draftBudget);
+            budgetData.changeInitialBudget(v);
+        } catch {}
     };
 
     return (
