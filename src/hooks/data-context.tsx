@@ -1,14 +1,8 @@
-import Decimal from 'decimal.js';
 import React from 'react';
 
 import {type BudgetData} from './data';
 
-const BudgetDataContext = React.createContext<BudgetData>({
-    initial_budget: new Decimal('0'),
-    changeInitialBudget: (v: Decimal) => {
-        void v;
-    },
-});
+const BudgetDataContext = React.createContext<BudgetData | undefined>(undefined);
 
 export const BudgetDataProvider: React.FC<{value: BudgetData; children: React.ReactNode}> = function ({
     value,
@@ -18,5 +12,7 @@ export const BudgetDataProvider: React.FC<{value: BudgetData; children: React.Re
 };
 
 export const useBudgetDataContext = function (): BudgetData {
-    return React.useContext(BudgetDataContext);
+    const res = React.useContext(BudgetDataContext);
+    if (res === undefined) throw new Error('useBudgetDataContext must be used inside BudgetDataProvider');
+    return res;
 };
