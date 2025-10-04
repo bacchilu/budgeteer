@@ -7,13 +7,13 @@ import {BudgetSummary, Card, Form, Header, Navbar, Page} from './ui';
 import {LoadingPage} from './ui/loading-page';
 
 const Main: React.FC = function () {
-    const budgetData: BudgetData = useBudgetDataContext();
+    const {state, actions} = useBudgetDataContext();
 
     const handleSubmit = function (amount: Decimal) {
-        budgetData.addTransaction(amount);
+        actions.addTransaction(amount);
     };
 
-    const transactionsTotal: Decimal = budgetData.transactions.reduce(
+    const transactionsTotal: Decimal = state.transactions.reduce(
         (acc: Decimal, current: Decimal) => acc.add(current),
         new Decimal('0')
     );

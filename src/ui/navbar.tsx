@@ -1,13 +1,12 @@
 import Decimal from 'decimal.js';
 import React from 'react';
 
-import {type BudgetData} from '../hooks/data';
 import {useBudgetDataContext} from '../hooks/data-context';
 import {formatCurrency} from '../lib/format-currency';
 
 const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTargetId}) {
-    const budgetData: BudgetData = useBudgetDataContext();
-    const [draftBudget, setDraftBudget] = React.useState(budgetData.initial_budget.toString());
+    const {state, actions} = useBudgetDataContext();
+    const [draftBudget, setDraftBudget] = React.useState(state.initialBudget.toString());
 
     const handleDraftBudgetChange = (nextValue: string) => {
         setDraftBudget(nextValue);
@@ -18,8 +17,10 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
 
         try {
             const v = new Decimal(draftBudget);
-            budgetData.changeInitialBudget(v);
-        } catch {}
+            actions.setInitialBudget(v);
+        } catch {
+            console.log('Ignore invalid input; keep the draft value for correction.')
+        }
     };
 
     return (
@@ -61,7 +62,7 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
                                     />
                                 </div>
                                 <div id="total-budget-help" className="form-text">
-                                    Current value: {formatCurrency(budgetData.initial_budget)}
+                                    Current value: {formatCurrency(state.initialBudget)}
                                 </div>
                             </div>
                         </div>
@@ -78,7 +79,7 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
 };
 
 export const Navbar: React.FC<{title: string}> = function ({title}) {
-    const budgetData: BudgetData = useBudgetDataContext();
+    const {state} = useBudgetDataContext();
 
     const modalTargetId = 'total-budget-modal';
     return (
@@ -96,7 +97,7 @@ export const Navbar: React.FC<{title: string}> = function ({title}) {
                         aria-expanded="false"
                     >
                         <span className="d-block text-uppercase small text-white-50">Initial budget</span>
-                        <span className="fw-semibold text-white">{formatCurrency(budgetData.initial_budget)}</span>
+                        <span className="fw-semibold text-white">{formatCurrency(state.initialBudget)}</span>
                     </a>
                 </div>
             </nav>
