@@ -7,11 +7,16 @@ import {BudgetSummary, Card, Form, Header, Navbar, Page} from './ui';
 import {LoadingPage} from './ui/loading-page';
 
 const Main: React.FC = function () {
-    const [spentAmount, setSpentAmount] = React.useState<Decimal>(new Decimal('0'));
+    const [transactions, setTransactions] = React.useState<Decimal[]>([]);
 
     const handleSubmit = function (amount: Decimal) {
-        setSpentAmount(spentAmount.add(amount));
+        setTransactions([...transactions, amount]);
     };
+
+    const transactionsTotal: Decimal = transactions.reduce(
+        (acc: Decimal, current: Decimal) => acc.add(current),
+        new Decimal('0')
+    );
 
     return (
         <>
@@ -19,7 +24,7 @@ const Main: React.FC = function () {
             <Page>
                 <Header description="Register costs against your fixed budget." />
                 <Card>
-                    <BudgetSummary spentAmount={spentAmount} />
+                    <BudgetSummary spentAmount={transactionsTotal} />
                     <Form onSubmit={handleSubmit} />
                 </Card>
             </Page>
