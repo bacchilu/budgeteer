@@ -2,22 +2,21 @@ import {Decimal} from 'decimal.js';
 import React from 'react';
 
 import {useBudgetData, type BudgetData} from './hooks/data';
-import {BudgetDataProvider} from './hooks/data-context';
+import {BudgetDataProvider, useBudgetDataContext} from './hooks/data-context';
 import {BudgetSummary, Card, Form, Header, Navbar, Page} from './ui';
 import {LoadingPage} from './ui/loading-page';
 
 const Main: React.FC = function () {
-    const [transactions, setTransactions] = React.useState<Decimal[]>([]);
+    const budgetData: BudgetData = useBudgetDataContext();
 
     const handleSubmit = function (amount: Decimal) {
-        setTransactions([...transactions, amount]);
+        budgetData.addTransaction(amount);
     };
 
-    const transactionsTotal: Decimal = transactions.reduce(
+    const transactionsTotal: Decimal = budgetData.transactions.reduce(
         (acc: Decimal, current: Decimal) => acc.add(current),
         new Decimal('0')
     );
-
     return (
         <>
             <Navbar title="Budget tracker" />
