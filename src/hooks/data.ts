@@ -3,18 +3,20 @@ import useSWR from 'swr';
 
 const INITIAL_BUDGET = new Decimal(210);
 
+type Transaction = Decimal;
+
 export interface BudgetData {
     initial_budget: Decimal;
-    transactions: Decimal[];
+    transactions: Transaction[];
     changeInitialBudget: (v: Decimal) => void;
-    addTransaction: (v: Decimal) => void;
+    addTransaction: (v: Transaction) => void;
 }
 
 export const useBudgetData = function (): BudgetData | undefined {
     const fetcher = async function () {
         return {initial_budget: INITIAL_BUDGET, transactions: []};
     };
-    const {data, mutate} = useSWR<{initial_budget: Decimal; transactions: Decimal[]}>('INITIAL_BUDGET', fetcher, {
+    const {data, mutate} = useSWR<{initial_budget: Decimal; transactions: Transaction[]}>('INITIAL_BUDGET', fetcher, {
         dedupingInterval: 60000 * 60 * 24,
     });
 
@@ -22,7 +24,7 @@ export const useBudgetData = function (): BudgetData | undefined {
         mutate({...data!, initial_budget: v}, false);
     };
 
-    const addTransaction = function (v: Decimal) {
+    const addTransaction = function (v: Transaction) {
         mutate({...data!, transactions: [...data!.transactions, v]}, false);
     };
 
