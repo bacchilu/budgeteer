@@ -1,6 +1,6 @@
 import {useContext} from 'react';
 
-import {type BudgetData} from './data';
+import {type BudgetData} from './use-data';
 import {BudgetDataContext} from './data-context';
 
 export const useBudgetDataContext = function (): BudgetData {

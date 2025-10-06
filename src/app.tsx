@@ -1,7 +1,7 @@
 import {Decimal} from 'decimal.js';
 import React from 'react';
 
-import {useBudgetData, type BudgetData} from './hooks/data';
+import {useBudgetData, type BudgetData} from './hooks/use-data';
 import {BudgetDataProvider} from './hooks/data-provider';
 import {useBudgetDataContext} from './hooks/use-data-context';
 import {BudgetSummary, Card, Form, Header, Navbar, Page} from './ui';

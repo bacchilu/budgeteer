@@ -3,14 +3,14 @@ import useSWR from 'swr';
 
 const INITIAL_BUDGET = new Decimal(210);
 
-export type Transaction = Decimal;
+type Transaction = Decimal;
 
-export interface BudgetState {
+interface BudgetState {
     initialBudget: Decimal;
     transactions: Transaction[];
 }
 
-export interface BudgetActions {
+interface BudgetActions {
     setInitialBudget: (value: Decimal) => void;
     addTransaction: (value: Transaction) => void;
 }
