@@ -3,7 +3,10 @@ import useSWR from 'swr';
 
 const INITIAL_BUDGET = new Decimal(210);
 
-type Transaction = Decimal;
+interface Transaction {
+    date: Date;
+    value: Decimal;
+}
 
 interface BudgetState {
     initialBudget: Decimal;
@@ -12,7 +15,8 @@ interface BudgetState {
 
 interface BudgetActions {
     setInitialBudget: (value: Decimal) => void;
-    addTransaction: (value: Transaction) => void;
+    addTransaction: (value: Decimal) => void;
+    getTransactionsTotal: () => Decimal;
 }
 
 export interface BudgetData {
@@ -40,15 +44,22 @@ export const useBudgetData = function (): BudgetData | undefined {
         );
     };
 
-    const addTransaction = function (value: Transaction) {
+    const addTransaction = function (value: Decimal) {
         mutate(
             (current) => {
                 if (current === undefined) return current;
-                return {...current, transactions: [...current.transactions, value]};
+                return {...current, transactions: [...current.transactions, {date: new Date(), value}]};
             },
             {revalidate: false}
         );
     };
 
-    return {state: data, actions: {setInitialBudget, addTransaction}};
+    const getTransactionsTotal = function (): Decimal {
+        return data.transactions.reduce(
+            (acc: Decimal, current: Transaction) => acc.add(current.value),
+            new Decimal('0')
+        );
+    };
+
+    return {state: data, actions: {setInitialBudget, addTransaction, getTransactionsTotal}};
 };
