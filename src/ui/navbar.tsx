@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
 import React from 'react';
 
-import {useBudgetDataContext} from '../hooks/data-context';
+import {useBudgetDataContext} from '../hooks/use-data-context';
 import {formatCurrency} from '../lib/format-currency';
 
 const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTargetId}) {
