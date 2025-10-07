@@ -1,25 +1,43 @@
 import Decimal from 'decimal.js';
 import React from 'react';
 
-import {useBudgetDataContext} from '../hooks/use-data-context';
-import {formatCurrency} from '../lib/format-currency';
+import {useBudgetDataContext} from '../../hooks/use-data-context';
+import {formatCurrency} from '../../lib/format-currency';
 
-const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTargetId}) {
+const useModalAutofocus = function (modalTargetId: string) {
+    const inputRef = React.useRef<HTMLInputElement | null>(null);
+    React.useEffect(() => {
+        const handleShown = function () {
+            inputRef.current!.focus();
+        };
+
+        const modalElement = document.getElementById(modalTargetId);
+        modalElement!.addEventListener('shown.bs.modal', handleShown);
+        return () => {
+            modalElement!.removeEventListener('shown.bs.modal', handleShown);
+        };
+    }, [modalTargetId]);
+
+    return inputRef;
+};
+
+export const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTargetId}) {
     const {state, actions} = useBudgetDataContext();
     const [draftBudget, setDraftBudget] = React.useState(state.initialBudget.toString());
+    const inputRef = useModalAutofocus(modalTargetId);
 
     const handleDraftBudgetChange = (nextValue: string) => {
         setDraftBudget(nextValue);
     };
 
-    const handleSubmit: React.FormEventHandler<HTMLFormElement> = function (e) {
-        e.preventDefault();
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = function (event) {
+        event.preventDefault();
 
         try {
-            const v = new Decimal(draftBudget);
-            actions.setInitialBudget(v);
+            const updatedBudget = new Decimal(draftBudget);
+            actions.setInitialBudget(updatedBudget);
         } catch {
-            console.log('Ignore invalid input; keep the draft value for correction.')
+            console.log('Ignore invalid input; keep the draft value for correction.');
         }
     };
 
@@ -50,6 +68,7 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
                                         $
                                     </span>
                                     <input
+                                        ref={inputRef}
                                         id="total-budget-input"
                                         type="number"
                                         className="form-control"
@@ -75,33 +94,5 @@ const TotalBudgetModal: React.FC<{modalTargetId: string}> = function ({modalTarg
                 </div>
             </div>
         </div>
-    );
-};
-
-export const Navbar: React.FC<{title: string}> = function ({title}) {
-    const {state} = useBudgetDataContext();
-
-    const modalTargetId = 'total-budget-modal';
-    return (
-        <>
-            <nav className="navbar navbar-dark bg-dark">
-                <div className="container d-flex justify-content-between align-items-center">
-                    <span className="navbar-brand mb-0 h1">{title}</span>
-                    <a
-                        href={`#${modalTargetId}`}
-                        className="d-block text-end text-decoration-none text-white"
-                        data-bs-toggle="modal"
-                        data-bs-target={`#${modalTargetId}`}
-                        role="button"
-                        aria-controls={modalTargetId}
-                        aria-expanded="false"
-                    >
-                        <span className="d-block text-uppercase small text-white-50">Initial budget</span>
-                        <span className="fw-semibold text-white">{formatCurrency(state.initialBudget)}</span>
-                    </a>
-                </div>
-            </nav>
-            <TotalBudgetModal modalTargetId={modalTargetId} />
-        </>
     );
 };

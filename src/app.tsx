@@ -32,7 +32,6 @@ export const App = function () {
     const budgetData: BudgetData | undefined = useBudgetData();
 
     if (budgetData === undefined) return <LoadingPage body="Loading budget data..." />;
-    console.log(budgetData);
     return (
         <BudgetDataProvider value={budgetData}>
             <Main />
