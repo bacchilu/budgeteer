@@ -1,17 +1,8 @@
 import Decimal from 'decimal.js';
 import useSWR from 'swr';
 
-const INITIAL_BUDGET = new Decimal(210);
-
-interface Transaction {
-    date: Date;
-    value: Decimal;
-}
-
-interface BudgetState {
-    initialBudget: Decimal;
-    transactions: Transaction[];
-}
+import {CurrentBudgetStore} from '../data';
+import type {BudgetState, Transaction} from '../data/types';
 
 interface BudgetActions {
     setInitialBudget: (value: Decimal) => void;
@@ -26,32 +17,26 @@ export interface BudgetData {
 
 export const useBudgetData = function (): BudgetData | undefined {
     const fetcher = async function (): Promise<BudgetState> {
-        return {initialBudget: INITIAL_BUDGET, transactions: []};
+        return CurrentBudgetStore.getCurrentBudget();
     };
-    const {data, mutate} = useSWR<BudgetState>('INITIAL_BUDGET', fetcher, {
-        dedupingInterval: 60000 * 60 * 24,
-    });
+    const {data, mutate} = useSWR<BudgetState>('CURRENT_BUDGET', fetcher, {dedupingInterval: 60000});
 
     if (data === undefined) return undefined;
 
     const setInitialBudget = function (value: Decimal) {
-        mutate(
-            (current) => {
-                if (current === undefined) return current;
-                return {...current, initialBudget: value};
-            },
-            {revalidate: false}
-        );
+        mutate(CurrentBudgetStore.setInitialBudget(value), {
+            revalidate: false,
+            rollbackOnError: true,
+            optimisticData: {...data, initialBudget: value},
+        });
     };
 
     const addTransaction = function (value: Decimal) {
-        mutate(
-            (current) => {
-                if (current === undefined) return current;
-                return {...current, transactions: [...current.transactions, {date: new Date(), value}]};
-            },
-            {revalidate: false}
-        );
+        mutate(CurrentBudgetStore.addTransaction(value), {
+            revalidate: false,
+            rollbackOnError: true,
+            optimisticData: {...data, transactions: [...data.transactions, {date: new Date(), value}]},
+        });
     };
 
     const getTransactionsTotal = function (): Decimal {
