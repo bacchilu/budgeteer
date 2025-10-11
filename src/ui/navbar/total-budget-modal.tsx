@@ -8,7 +8,7 @@ const useModalAutofocus = function (modalTargetId: string) {
     const inputRef = React.useRef<HTMLInputElement | null>(null);
     React.useEffect(() => {
         const handleShown = function () {
-            inputRef.current!.focus();
+            inputRef.current!.select();
         };
 
         const modalElement = document.getElementById(modalTargetId);
