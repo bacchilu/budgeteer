@@ -1,21 +1,46 @@
 import Decimal from 'decimal.js';
 
-import {deserialize, serialize, type BudgetState, type BudgetStore} from './types';
-
-const STORAGE_KEY = 'budgeteer:budget-state';
-const INITIAL_BUDGET = new Decimal(210);
+import {createLocalStorage} from '../lib/create-local-storage';
+import {type BudgetState, type BudgetStore} from './types';
 
 const LocalStorage = (function () {
-    return {
-        read: function (): BudgetState {
-            return deserialize(JSON.parse(localStorage.getItem(STORAGE_KEY)!));
-        },
-        write: function (state: BudgetState): void {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(serialize(state)));
-        },
+    const STORAGE_KEY = 'budgeteer:budget-state';
+    const INITIAL_BUDGET = new Decimal(210);
+
+    type PersistedTransaction = {
+        date: string;
+        value: string;
     };
+
+    type PersistedBudgetState = {
+        initialBudget: string;
+        transactions: PersistedTransaction[];
+    };
+
+    const deserialize = function (persisted: PersistedBudgetState): BudgetState {
+        const initialBudget = new Decimal(persisted.initialBudget);
+        const transactions = persisted.transactions.map((transaction) => ({
+            date: new Date(transaction.date),
+            value: new Decimal(transaction.value),
+        }));
+        return {initialBudget, transactions};
+    };
+
+    const serialize = function (state: BudgetState): PersistedBudgetState {
+        return {
+            initialBudget: state.initialBudget.toString(),
+            transactions: state.transactions.map((transaction) => ({
+                date: transaction.date.toISOString(),
+                value: transaction.value.toString(),
+            })),
+        };
+    };
+
+    const LocalStorage = createLocalStorage<BudgetState, PersistedBudgetState>(STORAGE_KEY, serialize, deserialize);
+    LocalStorage.write({initialBudget: new Decimal(INITIAL_BUDGET), transactions: []});
+
+    return LocalStorage;
 })();
-LocalStorage.write({initialBudget: new Decimal(INITIAL_BUDGET), transactions: []});
 
 const getCurrentBudget = async function (): Promise<BudgetState> {
     return LocalStorage.read();
