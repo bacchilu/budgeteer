@@ -36,10 +36,10 @@ const LocalStorage = (function () {
         };
     };
 
-    const LocalStorage = createLocalStorage<BudgetState, PersistedBudgetState>(STORAGE_KEY, serialize, deserialize);
-    LocalStorage.write({initialBudget: new Decimal(INITIAL_BUDGET), transactions: []});
-
-    return LocalStorage;
+    return createLocalStorage<BudgetState, PersistedBudgetState>(STORAGE_KEY, serialize, deserialize, {
+        initialBudget: new Decimal(INITIAL_BUDGET),
+        transactions: [],
+    });
 })();
 
 const getCurrentBudget = async function (): Promise<BudgetState> {
