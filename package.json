@@ -1,7 +1,7 @@
 {
   "name": "budgeteer",
   "private": true,
-  "version": "3.2.0",
+  "version": "3.2.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -29,8 +29,8 @@
     "globals": "^16.4.0",
     "npm-check-updates": "^19.1.1",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.46.1",
-    "vite": "^7.1.10"
+    "typescript-eslint": "^8.46.2",
+    "vite": "^7.1.11"
   },
   "prettier": {
     "arrowParens": "always",
