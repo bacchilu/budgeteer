@@ -24,7 +24,8 @@ export const Modal: React.FC<{open: boolean; onClose: () => void; children: Reac
         };
     }, [modalId]);
     React.useEffect(() => {
-        open ? modalRef.current!.show() : modalRef.current!.hide();
+        if (open) modalRef.current!.show();
+        else modalRef.current!.hide();
     }, [open]);
 
     return createPortal(
